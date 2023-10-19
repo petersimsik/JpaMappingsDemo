@@ -42,4 +42,17 @@ public class CourseDaoImpl implements CourseDao {
         Course course = getCourseById(id);
         em.remove(course);
     }
+
+    @Override
+    @Transactional
+    public void save(Course course) {
+        em.persist(course);
+    }
+
+    @Override
+    public Course findCourseByIdWithReviews(long id) {
+        TypedQuery<Course> query = em.createQuery("SELECT c FROM Course c JOIN FETCH c.reviews WHERE c.id = :id", Course.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
+    }
 }

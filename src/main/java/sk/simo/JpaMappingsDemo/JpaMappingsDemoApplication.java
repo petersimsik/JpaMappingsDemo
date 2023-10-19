@@ -11,6 +11,7 @@ import sk.simo.JpaMappingsDemo.dao.InstructorDetailDao;
 import sk.simo.JpaMappingsDemo.entity.Course;
 import sk.simo.JpaMappingsDemo.entity.Instructor;
 import sk.simo.JpaMappingsDemo.entity.InstructorDetail;
+import sk.simo.JpaMappingsDemo.entity.Review;
 
 import java.util.List;
 
@@ -45,10 +46,26 @@ public class JpaMappingsDemoApplication {
 
 			//updateCourse(courseDao);
 
-			deleteCourseById(courseDao);
+			//deleteCourseById(courseDao);
 
+			//createCourseAndReviews(courseDao);
+
+			findCourseWithReviews(courseDao);
 			System.out.println("Application end.");
 		};
+	}
+
+	private void findCourseWithReviews(CourseDao courseDao) {
+		Course course = courseDao.findCourseByIdWithReviews(10);
+		System.out.println(course);
+		System.out.println("Reviews: " + course.getReviews());
+	}
+
+	private void createCourseAndReviews(CourseDao courseDao) {
+		Course course = new Course("Scratch");
+		course.addReview(new Review("Cool!"));
+		course.addReview(new Review("Finally, the best of the best"));
+		courseDao.save(course);
 	}
 
 	private void deleteCourseById(CourseDao courseDao) {
