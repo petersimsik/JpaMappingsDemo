@@ -11,4 +11,5 @@ public interface CourseDao {
     void deleteCourseById(long id);
     void save(Course course);
     Course findCourseByIdWithReviews(long id);
+    Course findCourseByIdWithStudents(long id);
 }

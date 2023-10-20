@@ -8,10 +8,8 @@ import org.springframework.context.annotation.Bean;
 import sk.simo.JpaMappingsDemo.dao.CourseDao;
 import sk.simo.JpaMappingsDemo.dao.InstructorDao;
 import sk.simo.JpaMappingsDemo.dao.InstructorDetailDao;
-import sk.simo.JpaMappingsDemo.entity.Course;
-import sk.simo.JpaMappingsDemo.entity.Instructor;
-import sk.simo.JpaMappingsDemo.entity.InstructorDetail;
-import sk.simo.JpaMappingsDemo.entity.Review;
+import sk.simo.JpaMappingsDemo.dao.StudentDao;
+import sk.simo.JpaMappingsDemo.entity.*;
 
 import java.util.List;
 
@@ -23,7 +21,7 @@ public class JpaMappingsDemoApplication {
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(InstructorDao instructorDao, InstructorDetailDao instructorDetailDao, CourseDao courseDao) {
+	public CommandLineRunner commandLineRunner(InstructorDao instructorDao, InstructorDetailDao instructorDetailDao, CourseDao courseDao, StudentDao studentDao) {
 		return runner -> {
 			System.out.println("Application started");
 			//createInstructor(instructorDao);
@@ -50,9 +48,55 @@ public class JpaMappingsDemoApplication {
 
 			//createCourseAndReviews(courseDao);
 
-			findCourseWithReviews(courseDao);
+			//findCourseWithReviews(courseDao);
+
+			//createCourseAndStudents(courseDao);
+
+			//findCourseWithStudents(courseDao);
+
+			//findStudentWithCourses(studentDao);
+
+			//addMoreCoursesForStudent(studentDao);
+
+			deleteStudent(studentDao);
+
 			System.out.println("Application end.");
 		};
+	}
+
+	private void deleteStudent(StudentDao studentDao) {
+		studentDao.deleteStudentById(3);
+	}
+
+	private void addMoreCoursesForStudent(StudentDao studentDao) {
+		Student student = studentDao.findStudentByIdWithCourses(1);
+		student.addCourse(new Course("Course number 1"));
+		student.addCourse(new Course("Course number 2"));
+		student.addCourse(new Course("Course number 3"));
+		studentDao.update(student);
+	}
+
+	private void findStudentWithCourses(StudentDao studentDao) {
+		Student student = studentDao.findStudentByIdWithCourses(1);
+		System.out.println(student);
+		System.out.println(student.getCourses());
+	}
+
+	private void findCourseWithStudents(CourseDao courseDao) {
+		Course course = courseDao.findCourseByIdWithStudents(10);
+		System.out.println(course);
+		System.out.println(course.getStudents());
+	}
+
+	private void createCourseAndStudents(CourseDao courseDao) {
+		Course course = new Course("Mastering Java");
+		Student student1 = new Student("Peter", "Simsik", "peter.simsik@gmail.com");
+		Student student2 = new Student("Peter", "Druhy", "peter.druhy@gmail.com");
+		Student student3 = new Student("Peter", "Treti", "peter.treti@gmail.com");
+		course.addStudent(student1);
+		course.addStudent(student2);
+		course.addStudent(student3);
+		courseDao.save(course);
 	}
 
 	private void findCourseWithReviews(CourseDao courseDao) {

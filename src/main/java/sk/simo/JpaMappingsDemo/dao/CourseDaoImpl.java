@@ -55,4 +55,11 @@ public class CourseDaoImpl implements CourseDao {
         query.setParameter("id", id);
         return query.getSingleResult();
     }
+
+    @Override
+    public Course findCourseByIdWithStudents(long id) {
+        TypedQuery<Course> query = em.createQuery("SELECT c FROM Course c JOIN FETCH c.students WHERE c.id = :courseId", Course.class);
+        query.setParameter("courseId", id);
+        return query.getSingleResult();
+    }
 }
